@@ -266,7 +266,7 @@ $lang_arr = array(
 		'stats_alltime'=>'Stats - From beginning',
 		'trips_done'=>'Trips done',
 		'distance_driven'=>'Driven distance',
-		'disc_lookup_user'=>'If you would like to kick the user, change the rank or message him, close this modal.',
+		'disc_lookup_user'=>'If you would like to kick the user, change the rank or password, close this modal.',
 		'change_role'=>'Change role',
 		'u_are_about_del'=>'You are about to delete',
 		'give_a_reason'=>'Give a reason of removal',
@@ -352,7 +352,12 @@ $lang_arr = array(
 							If everything is set up, click the button below.".$newline."
 							Note - It can take somewhile to update some files, so be patient!",
 		'install_now'=>'Install now!',
-		'dashboard_addtrip_title'=>'VTC Dashboard - Add trip'
+		'dashboard_addtrip_title'=>'VTC Dashboard - Add trip',
+		'loads'=>'Loads',
+		'dashboard_loads_title'=>'VTC Dashboard - Loads',
+		'add_load'=>'Add load',
+		'addload_success'=>'Load has been added successfully! Remember about giving the full name in <code>load_en.php</code>!',
+		'delload_success'=>'Load has been deleted successfully!'
 );
 //Don't edit the lines below
 $array_LP = array_merge($lang_arr,(array)$load);

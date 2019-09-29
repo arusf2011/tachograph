@@ -297,17 +297,13 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="./profile">
+                <!--<a class="dropdown-item" href="./profile">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   <?php echo $f3->get('profile'); ?>
-                </a>
+                </a> -->
                 <a class="dropdown-item" href="./settings">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   <?php echo $f3->get('settings'); ?>
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="./signout" data-toggle="modal" data-target="#logoutModal">
@@ -401,7 +397,7 @@
       <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Made with <3 by <a href="https://arkadiusz-fatyga.eu" target="_blank">Arkadiusz Fatyga</a> | <a href="https://github.com/arusf2011/tachograph" target="_blank">Version 1.0 BETA</a></span><br>
+            <span>Made with <3 by <a href="https://arkadiusz-fatyga.eu" target="_blank">Arkadiusz Fatyga</a> | <a href="https://github.com/arusf2011/tachograph" target="_blank">Version 1.0</a></span><br>
             <span id="copyright">Copyright &copy; <script> var data = new Date(); var copyright = document.getElementById('copyright'); copyright.innerHTML = copyright.innerHTML + data.getFullYear();</script></span>
           </div>
         </div>

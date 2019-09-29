@@ -335,7 +335,11 @@ $lang_arr = array(
 		'addload_success'=>'Dodanie ładunku zakończyło się sukcesem! Pamiętaj o dodaniu pełnej nazwy w <code>load_pl.php</code> !',
 		'delload_success'=>'Usunięcie ładunku zakończyło się sukcesem!',
 		'error_import_data'=>'Błąd przy imporcie danych! Proszę to zgłosić jako błąd na GitHubie lub wysłać maila na adres '.$email_dev,
-		'error_inserting_data'=>'Błąd przy dodawaniu danych! Proszę to zgłosić jako błąd na GitHubie lub wysłać maila na adres '.$email_dev
+		'error_inserting_data'=>'Błąd przy dodawaniu danych! Proszę to zgłosić jako błąd na GitHubie lub wysłać maila na adres '.$email_dev,
+		'change_role'=>'Zmień rangę',
+		'disc_lookup_user'=>'Jeśli chcesz wyrzucić użytkownika, zmienić rangę lub hasło, zamknij te okno.',
+		'avatar_upload'=>'Wstaw awatar',
+		'upavatar_success'=>'Awatar został wrzucony!',
 );
 //Don't edit the lines below
 $array_LP = array_merge($lang_arr,(array)$load);
