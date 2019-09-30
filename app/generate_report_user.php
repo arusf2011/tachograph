@@ -1,6 +1,11 @@
 <?php
     $f3 = Base::instance();
     session_start();
+    if(!isset($_SESSION['nickname']))
+    {
+      header('Location: ./login');
+      exit();
+    }
     $f3->set('global_settings',$db->exec('SELECT * FROM settings'));
     $global_settings = $f3->get('global_settings');
     require_once './vendor/autoload.php';
@@ -14,7 +19,7 @@
     }
     else
     {
-        $user_id = $_SESSION['user_id'];
+        $user_id = intval($_SESSION['user_id']);
         $f3->set('nickname_user',$db->exec('SELECT nickname FROM users WHERE id = ?',$user_id));
         $nickname = $f3->get('nickname_user');
         $nickname = $nickname[0]['nickname'];

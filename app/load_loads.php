@@ -1,8 +1,12 @@
 <?php
  	$f3=Base::instance();
   	session_start();
-	$game = $_SESSION['game_id'];
-	
+	$game = intval($_SESSION['game_id']);
+	if(!isset($_SESSION['nickname']))
+    {
+      header('Location: ./login');
+      exit();
+    }
 	if($game == 0)
 	{
 		$f3->set('loads',$db->exec('SELECT id, short_name FROM load_tonnage WHERE game = 0'));

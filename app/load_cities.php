@@ -1,7 +1,12 @@
 <?php
  	$f3=Base::instance();
-  	session_start();
-	$game = $_SESSION['game_id'];
+	session_start();
+	if(!isset($_SESSION['nickname']))
+    {
+      header('Location: ./login');
+      exit();
+    }
+	$game = intval($_SESSION['game_id']);
 	
 	if($game == 0)
 	{
