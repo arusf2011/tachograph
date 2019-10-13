@@ -33,4 +33,9 @@ I'll inform you once I'll have the one. :)
 ## Discord Server
 You are always welcome to join the Discord server.
 
-Link to it is here.
+[Link to it is here.](https://discord.gg/3RqawdA)
+
+## Facebook Page
+Here you can get latest information about the script and also some sneak peaks.
+
+[Link to fanpage](https://www.facebook.com/tachographarekfatyga/)
