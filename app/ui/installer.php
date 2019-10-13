@@ -13,7 +13,7 @@
 	<body>
 	    <div class="container">
         <div class="card card-container">
-            <img id="profile-img" class="profile-img-card" src="./images/truck_tacho.png" />
+            <img id="profile-img" class="profile-img-card" src="./images/truck.png" />
             <p id="profile-name" class="profile-name-card"></p>
             <?php
                 if(isset($_SESSION['error']) && $_SESSION['error'] == '1')
