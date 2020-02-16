@@ -1,8 +1,6 @@
 <?php
   $f3=Base::instance();
   session_start();
-  $f3->set('loads_arr',$db->exec('SELECT * FROM load_tonnage'));
-  $loads = $f3->get('loads_arr');
   $f3->set('global_settings_arr',$db->exec('SELECT * FROM settings'));
   $global_settings = $f3->get('global_settings_arr');
   if(!isset($_SESSION['nickname']))
@@ -19,8 +17,8 @@
   $role = $user_data[0]['role_id'];
   if($roles[$role-1]['admin'] == false)
   {
-    header('Location: ./dashboard');
-    exit();
+      header('Location: ./dashboard');
+      exit();
   }
 ?>
 <!DOCTYPE html>
@@ -34,17 +32,17 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title><?php echo $f3->get('dashboard_loads_title'); ?></title>
+  <title><?php echo $f3->get('dashboard_addconvoy_title'); ?></title>
 
   <!-- Custom fonts for this template-->
   <script src="https://kit.fontawesome.com/dd99fb3228.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link href="./css/sb-admin-2.min.css" rel="stylesheet">
   <link href="./css/main.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="./css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="./css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="./css/gijgo.min.css">
 
 </head>
 
@@ -91,7 +89,7 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-users"></i>
           <span><?php echo $f3->get('users'); ?></span>
         </a>
@@ -106,30 +104,30 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#convoys" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#convoys" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-truck-moving"></i>
           <span><?php echo $f3->get('convoys'); ?></span>
         </a>
-        <div id="convoys" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="convoys" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item" href="./list_convoys"><i class="fas fa-list-alt fa-fw"></i> <?php echo $f3->get('list'); ?></a>
-            <a class="collapse-item" href="./add_convoy"><i class="far fa-plus-square fa-fw"></i> <?php echo $f3->get('add'); ?></a>
+            <a class="collapse-item active" href="./add_convoy"><i class="far fa-plus-square fa-fw"></i> <?php echo $f3->get('add'); ?></a>
           </div>
         </div>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span><?php echo $f3->get('settings_lang'); ?></span>
         </a>
-        <div id="collapseThree" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item" href="./cities"><i class="fas fa-city fa-fw"></i> <?php echo $f3->get('cities'); ?></a>
             <a class="collapse-item" href="./companies"><i class="fas fa-building fa-fw"></i> <?php echo $f3->get('companies'); ?></a>
             <a class="collapse-item" href="./dlcs"><i class="fas fa-file-download fa-fw"></i> <?php echo $f3->get('dlcs'); ?></a>
             <a class="collapse-item" href="./trucks"><i class="fas fa-truck fa-fw"></i> <?php echo $f3->get('trucks'); ?></a>
-            <a class="collapse-item active" href="./loads"><i class="fas fa-truck-loading fa-fw"></i> <?php echo $f3->get('loads'); ?></a>
+            <a class="collapse-item" href="./loads"><i class="fas fa-truck-loading fa-fw"></i> <?php echo $f3->get('loads'); ?></a>
             <a class="collapse-item" href="./global_settings"><i class="fas fa-edit fa-fw"></i> <?php echo $f3->get('global_settings'); ?></a>
           </div>
         </div>
@@ -204,7 +202,7 @@
           <ul class="navbar-nav ml-auto">
 
              <!-- Nav Item - Alerts -->
-             <li class="nav-item dropdown no-arrow mx-1">
+            <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
@@ -344,25 +342,8 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          <?php
-            if(isset($_SESSION['success']) && $_SESSION['success'] == 'add_load')
-            {
-              ?>
-                <div class="alert alert-success">
-                  <?= $f3->get('addload_success') ?>
-                </div>
-              <?php
-              unset($_SESSION['success']);
-            }
-            else if(isset($_SESSION['success']) && $_SESSION['success'] == 'del_load')
-            {
-              ?>
-                <div class="alert alert-success">
-                  <?= $f3->get('delload_success') ?>
-                </div>
-              <?php
-              unset($_SESSION['success']);
-            }
+          <h1 class="page-title"><?php echo $f3->get('addconvoy') ?></h1>
+          <?php 
             if(isset($_SESSION['error']) && $_SESSION['error'] == '1')
             {
               ?>
@@ -370,68 +351,79 @@
               <?php
             }
           ?>
-          <div class="card shadow border-primary">
-            <div class="card-header">
-              <h1 class="h3 text-gray-800"><?php echo $f3->get('loads'); ?></h1>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table id="dataTable" class="display table table-striped table-bordered" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th><?= $f3->get('short_name') ?></th>
-                      <th><?= $f3->get('game') ?></th>
-                      <th><?= $f3->get('tonnage') ?></th>
-                      <th><?= $f3->get('actions') ?></th>
-                    </tr>
-                  </thead>
-                  <tbody>
+          <form method="POST" action="./new_convoy_add">
+            <div class="row">
+                <div class="col">
+                  <label for="name"><?php echo $f3->get('name') ?><span style="color:red;font-size: 20px;">*</span></label>
+                  <input type="text" class="form-control" name="name" required>
+                  <label for="datepicker" class="mt-3"><?= $f3->get('date') ?><span style="color:red;font-size: 20px;">*</span></label>
+                  <input id="datepicker" />
+                  <input type="hidden" name="date" id="date">
+                  <label for="timepicker1" class="mt-3"><?= $f3->get('time_beg_convoy') ?><span style="color:red;font-size: 20px;">*</span></label>
+                  <input id="timepicker1" />
+                  <input type="hidden" name="time_beg" id="time_beg">
+                  <label for="timepicker2" class="mt-3"><?= $f3->get('time_groupup') ?><span style="color:red;font-size: 20px;">*</span></label>
+                  <input id="timepicker2" />
+                  <input type="hidden" name="time_groupup" id="time_groupup">
+                  <label for="server_game" class="mt-2"><?php echo $f3->get('server_game') ?></label>
+                  <select class="form-control" name="server_game" id="server">
+                    <option value=""><?= $f3->get('unselected') ?></option>
                     <?php
-                      foreach($loads as $load)
+                      $url_servers = file_get_contents('https://api.truckersmp.com/v2/servers');
+                      $servers = json_decode($url_servers);
+                      foreach($servers->response as $server)
                       {
-                        ?>
-                        <tr>
-                          <td><?= $load['id'] ?></td>
-                          <td><?= $load['short_name'] ?></td>
-                          <td><?php if($load['game'] == false) echo 'ETS2'; else echo 'ATS' ?></td>
-                          <td><?= $load['tonnage'] ?></td>
-                          <td class="text-center"><a href="./delete_load/<?= $load['id'] ?>"><button class="btn btn-danger"><i class="fas fa-trash"></i> <?= $f3->get('delete') ?></button></a></td>
-                        </tr>
-                        <?php
+                        echo '<option value="'.$server->shortname.'">'.$server->game.' - '.$server->name.'</option>';
                       }
                     ?>
-                  </tbody>
-                </table>
-              </div>
-              <hr>
-              <h4><b><?= $f3->get('add_load') ?></b></h4>
-              <div class="form-inline">
-                <form method="POST" action="./new_load">
-                  <p>
-                    <input type="text" class="form-control" name="short_name" placeholder="<?= $f3->get('short_name') ?>">
-                    <select name="game" class="form-control">
-                      <option value=""><?= $f3->get('game') ?></option>
-                      <option value="0">ETS2</option>
-                      <option value="1">ATS</option>
-                    <input type="text" class="form-control" name="tonnage" placeholder="<?= $f3->get('tonnage') ?>">
-                    </select>
-                    <button type="submit" class="btn btn-success">
-                      <i class="fas fa-plus"></i> <?= $f3->get('add') ?>
-                    </button>
-                  </p>
-                </form>
-              </div>
+                    <option value="ETS2 Event">ETS2 - Event</option>
+                    <option value="ATS Event">ATS - Event</option>
+                  </select>
+                  <label for="server_voip" class="mt-2"><?php echo $f3->get('server_voip') ?>&nbsp;<small><?= $f3->get('post_url_voip') ?></small></label>
+                  <input type="text" name="server_voip" id="server_voip" class="form-control">
+                  <label for="route" class="mt-2"><?= $f3->get('route') ?>&nbsp;<small><?= $f3->get('post_url_image') ?></small></label>
+                  <input type="text" name="route" id="route" class="form-control">
+                  <label for="route" class="mt-2"><?= $f3->get('convoy_is_private') ?></label>
+                  <select name="private" id="private" class="form-control">
+                      <option value="0" selected><?= $f3->get('no') ?></option>
+                      <option value="1"><?= $f3->get('yes') ?></option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="game"><?= $f3->get('select_game') ?><span style="color:red;font-size: 20px;">*</span></label>
+                  <select id="game" class="form-control">
+                    <option value="">---</option>
+                    <option value="0">ETS2</option>
+                    <option value="1">ATS</option>
+                  </select>
+                  <label for="from_city" class="mt-2"><?php echo $f3->get('from') ?><span style="color:red;font-size: 20px;">*</span></label>
+                  <select class="form-control" name="from_city" required id="from_city" data-live-search="true">
+                  </select>
+                  <select class="form-control" name="from_company" required id="from_company" data-live-search="true">
+                  </select>
+                  <label for="to_city" class="mt-2"><?php echo $f3->get('to') ?><span style="color:red;font-size: 20px;">*</span></label>
+                  <select class="form-control" name="to_city" id="to_city" required data-live-search="true">
+                  </select>
+                  <select class="form-control" name="to_company" id="to_company" required data-live-search="true">
+                  </select>
+                  <label for="image_start" class="mt-2"><?= $f3->get('start_convoy') ?>&nbsp;<small><?= $f3->get('post_url_image') ?></small></label>
+                  <input type="text" name="image_start" id="image_start" class="form-control">
+                  <label for="image_end" class="mt-2"><?= $f3->get('end_convoy') ?>&nbsp;<small><?= $f3->get('post_url_image') ?></small></label>
+                  <input type="text" name="image_end" id="image_end" class="form-control">
+                  <label for="rules" class="mt-2"><?= $f3->get('rules') ?></label>
+                  <textarea class="form-control" name="rules" id="rules"></textarea>
+                </div>
             </div>
-          </div>
-        <!-- /.container-fluid -->
-
+            <div class="text-center mt-3">
+              <button class="btn btn-success"><i class="fas fa-plus-square"></i> <?php echo $f3->get('addconvoy') ?></button>
+            </div>
+          </form>
         </div>
       </div>
       <!-- End of Main Content -->
 
       <!-- Footer -->
-      <footer class="sticky-footer bg-white">
+      <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Made with <3 by <a href="https://arkadiusz-fatyga.eu" target="_blank">Arkadiusz Fatyga</a> | <a href="https://github.com/arusf2011/tachograph" target="_blank">Version 1.1</a></span><br>
@@ -472,48 +464,103 @@
   </div>
 
   <!-- Bootstrap core JavaScript-->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script type="text/javascript" charset="utf8" src="./js/jquery.dataTables.min.js"></script>
-  <script type="text/javascript" charset="utf8" src="./js/dataTables.bootstrap4.min.js"></script>
-  <script>
-    $(document).ready( function () {
-      if(navigator.language == 'pl-PL' || navigator.userLanguage =='pl-PL')
-      {
-        $('#dataTable').DataTable({
-          "language": {
-            "url": "./js/dataTables.polish.json"
-          }
-        });
-      }
-      else
-      {
-        $('#dataTable').DataTable();
-      }
-    } );
-      function mark_as_read() {
-        var xmlhttp_notifications = new XMLHttpRequest();
-        xmlhttp_notifications.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            $('head').append('<style>'+
-              '.notification {background-color: #f8f6f6;}'+
-              '</style>'
-            );
-            document.getElementById('counter').innerHTML = "0";
-          }
-        };
-        xmlhttp_notifications.open("GET", "./notifications_read", true);
-        xmlhttp_notifications.send();
-      }
-  </script>
 
   <!-- Core plugin JavaScript-->
   <script src="./js/jquery.easing.min.js"></script>
 
   <!-- Custom scripts for all pages-->
   <script src="./js/sb-admin-2.min.js"></script>
+  <script src="./js/bootstrap-select.min.js"></script>
+  <script src="./js/gijgo.min.js"></script>
+  <script>
+    $("#game").change(function() {
+        var game = document.getElementById('game').value;
+        var xmlhttp_cities = new XMLHttpRequest();
+        xmlhttp_cities.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("from_city").innerHTML = this.responseText;
+            document.getElementById("to_city").innerHTML = this.responseText;
+            document.getElementById("from_city").classList.add('selectpicker');
+            document.getElementById("to_city").classList.add('selectpicker');
+            $('#from_city').selectpicker({
+              style: 'btn-default border-secondary'
+            });
+            $('#to_city').selectpicker({
+              style: 'btn-default border-secondary'
+            });
+          }
+        };
+        xmlhttp_cities.open("GET", "./load_cities/"+game, true);
+        xmlhttp_cities.send();
+        
+        var xmlhttp_companies = new XMLHttpRequest();
+        xmlhttp_companies.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("from_company").innerHTML = this.responseText;
+            document.getElementById("to_company").innerHTML = this.responseText;
+            document.getElementById("from_company").classList.add('selectpicker');
+            document.getElementById("to_company").classList.add('selectpicker');
+            $('#from_company').selectpicker({
+              style: 'btn-default border-secondary'
+            });
+            $('#to_company').selectpicker({
+              style: 'btn-default border-secondary'
+            });
+          }
+        };
+        xmlhttp_companies.open("GET", "./load_companies/"+game, true);
+        xmlhttp_companies.send();
+    });
+    $('#datepicker').datepicker({
+      modal:true,
+      footer:true,
+      format: 'yyyy-mm-dd',
+      change: function () {
+        var datepicker = $('#datepicker').datepicker();
+        document.getElementById('date').value = datepicker.value();
+      }
+    });
 
+    $('#timepicker1').timepicker({
+      modal:true,
+      footer:true,
+      mode:'24hr',
+      format: 'HH:MM',
+      change: function () {
+        var timepicker1 = $('#timepicker1').timepicker();
+        document.getElementById('time_beg').value = timepicker1.value();
+      }
+    });
+
+    $('#timepicker2').timepicker({
+      modal:true,
+      footer:true,
+      mode:'24hr',
+      format: 'HH:MM',
+      change: function () {
+        var timepicker2 = $('#timepicker2').timepicker();
+        document.getElementById('time_groupup').value = timepicker2.value();
+      }
+    });
+    function mark_as_read() {
+      var xmlhttp_notifications = new XMLHttpRequest();
+      xmlhttp_notifications.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          $('head').append('<style>'+
+            '.notification {background-color: #f8f6f6;}'+
+            '</style>'
+          );
+          document.getElementById('counter').innerHTML = "0";
+        }
+      };
+      xmlhttp_notifications.open("GET", "./notifications_read", true);
+      xmlhttp_notifications.send();
+    }
+  </script>
+  
 </body>
 
 </html>

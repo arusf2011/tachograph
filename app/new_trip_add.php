@@ -34,13 +34,14 @@
     $money = intval($_SESSION['money']);
     $datetime_beg = $_SESSION['datetime_beg'];
     $datetime_end = $_SESSION['datetime_end'];
+    $participate_convoy = $_SESSION['participate_convoy'];
     $files = $_SESSION['files'];
     $name = array_keys($files);
     $name = $name['0'];
     if($files[0] == false)
     {
-        $f3->set('result',$db->exec('INSERT INTO trips VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,0)',
-            array($from_city,                               //(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)
+        $f3->set('result',$db->exec('INSERT INTO trips VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,0,?)',
+            array($from_city,                               //(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)
             $from_company,
             $to_city,
             $to_company,
@@ -53,7 +54,8 @@
             $damage,
             $money,
             $name,
-            $id_user[0]['id'])
+            $id_user[0]['id'],
+            $participate_convoy)
         ));
         $result = $f3->get('result');
         if($result == true)
@@ -73,6 +75,7 @@
                 $_SESSION['money'],
                 $_SESSION['datetime_beg'],
                 $_SESSION['datetime_end'],
+                $_SESSION['participate_convoy'],
                 $_SESSION['files'],
                 $_SESSION['error']);
             header('Location: ./addtrip_success');

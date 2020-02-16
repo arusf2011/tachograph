@@ -1,6 +1,21 @@
 <?php
   session_start();
-
+  /* Main function */
+  $f3->set('ONERROR',
+  function($f3) {
+    if(file_exists('./LOCK'))
+    {
+      $_SESSION['error'] = $f3->get('ERROR.code');
+      $_SESSION['error_text'] = $f3->get('ERROR.status');
+      $view = new View;
+      echo $view->render('./app/ui/error.html');
+    }
+    else
+    {
+      echo $f3->get('ERROR.code').' - '.$f3->get('ERROR.status');
+    }
+  }
+);
   $f3->route('GET /',
     function() {
       $view = new View;
@@ -11,6 +26,12 @@
     function () {
       $view = new View;
       echo $view->render('./app/ui/login.php');
+    }
+  );
+  $f3->route('GET /logout',
+    function($f3) {
+      session_destroy();
+      $f3->reroute('/login');
     }
   );
   $f3->route('GET /login/@error',
@@ -39,6 +60,7 @@
       echo $view->render('./app/ui/dashboard.php');
     }
   );
+  /* Adding new user */
   $f3->route('GET /add_user',
     function() {
       $view = new View;
@@ -74,12 +96,69 @@
       echo $view->render('./app/new_user_add.php');
     }
   );
+  /* Listing users */
   $f3->route('GET /list_users',
     function() {
       $view = new View;
       echo $view->render('./app/ui/list_users.php');
     }
   );
+  $f3->route('GET /user/@id',
+    function($f3) {
+      $_SESSION['user_id'] = $f3->get('PARAMS.id');
+      $view = new View;
+      echo $view->render('./app/single_user.php');
+    }
+  );
+  $f3->route('GET /delete_user/@id',
+    function($f3) {
+      $_SESSION['user_id'] = $f3->get('PARAMS.id');
+      $view = new View;
+      echo $view->render('./app/delete_user.php');
+    }
+  );
+  $f3->route('POST /deluser/@id',
+    function($f3) {
+      $_SESSION['user_id'] = $f3->get('PARAMS.id');
+      $_SESSION['reason'] = $f3->get('POST.reason');
+      $view = new View;
+      echo $view->render('./app/deluser.php');
+    }
+  );
+  $f3->route('GET /deluser_success',
+    function($f3) {
+      $_SESSION['success'] = 'deleted_user';
+      $f3->reroute('/list_users');
+    }
+  );
+  $f3->route('GET /change_role/@user_id/@role_id',
+    function($f3) {
+      $_SESSION['user_id'] = $f3->get('PARAMS.user_id');
+      $_SESSION['role_id'] = $f3->get('PARAMS.role_id');
+      $view = new View;
+      echo $view->render('./app/change_role.php');
+    }
+  );
+  $f3->route('GET /modrole_success',
+    function($f3) {
+      $_SESSION['success'] = 'mod_role';
+      $f3->reroute('/list_users');
+    }
+  );
+  $f3->route('POST /pass_reset_admin',
+    function($f3) {
+      $_SESSION['email'] = $f3->get('POST.email');
+      $view = new View;
+      echo $view->render('./app/pass_reset_admin.php');
+    }
+  );
+  $f3->route('GET /list_users/reset_pass',
+    function($f3) {
+      $_SESSION['success'] = 'reset_pass';
+      $f3->reroute('/list_users');
+    }
+  );
+  /* DLCs */
   $f3->route('GET /dlcs',
     function() {
       $view = new View;
@@ -119,6 +198,7 @@
       $f3->reroute('/dlcs');
     }
   );
+  /* Cities */
   $f3->route('GET /cities',
     function() {
       $view = new View;
@@ -154,6 +234,7 @@
       $f3->reroute('/cities');
     }
   );
+  /* Companies */
   $f3->route('GET /companies',
     function() {
       $view = new View;
@@ -194,6 +275,7 @@
       $f3->reroute('/companies');
     }
   );
+  /* Trucks */
   $f3->route('GET /trucks',
     function() {
       $view = new View;
@@ -234,6 +316,7 @@
       $f3->reroute('/trucks');
     }
   );
+  /* Global settings */
   $f3->route('GET /global_settings',
     function() {
       $view = new View;
@@ -260,6 +343,7 @@
       $f3->reroute('/global_settings');
     }
   );
+  /* Roles */
   $f3->route('GET /roles',
     function() {
       $view = new View;
@@ -302,18 +386,11 @@
       $f3->reroute('/roles');
     }
   );
+  /* Recrutation */
   $f3->route('GET /recrutation',
     function() {
       $view = new View;
       echo $view->render('./app/ui/recrutation.php');
-    }
-  );
-  $f3->set('ONERROR',
-    function($f3) {
-      $_SESSION['error'] = $f3->get('ERROR.code');
-      $_SESSION['error_text'] = $f3->get('ERROR.status');
-      $view = new View;
-      echo $view->render('./app/ui/error.html');
     }
   );
   $f3->route('GET /recruit/@id',
@@ -323,12 +400,7 @@
       echo $view->render('./app/recruit.php');
     }
   );
-  $f3->route('GET /logout',
-    function($f3) {
-      session_destroy();
-      $f3->reroute('./login');
-    }
-  );
+  /* Trips (admin) */
   $f3->route('GET /trips_admin',
     function() {
       $view = new View;
@@ -342,6 +414,37 @@
       echo $view->render('./app/trip_admin.php');
     }
   );
+  $f3->route('POST /accept_trip/@id',
+    function($f3) {
+      $_SESSION['trip_id'] = $f3->get('PARAMS.id');
+      $_SESSION['user_id'] = $f3->get('POST.user_id');
+      $_SESSION['message'] = $f3->get('POST.message');
+      $view = new View;
+      echo $view->render('./app/accept_trip.php');
+    }
+  );
+  $f3->route('GET /accepted_trip',
+    function($f3) {
+      $_SESSION['success'] = 'accepted_trip';
+      $f3->reroute('/trips_admin');
+    }
+  );
+  $f3->route('GET /rejected_trip',
+    function($f3) {
+      $_SESSION['success'] = 'rejected_trip';
+      $f3->reroute('/trips_admin');
+    }
+  );
+  $f3->route('POST /reject_trip/@id',
+    function($f3) {
+      $_SESSION['trip_id'] = $f3->get('PARAMS.id');
+      $_SESSION['user_id'] = $f3->get('POST.user_id');
+      $_SESSION['message'] = $f3->get('POST.message');
+      $view = new View;
+      echo $view->render('./app/reject_trip.php');
+    }
+  );
+  /* Trips (user) */
   $f3->route('GET /add_trip',
     function() {
       $view = new View;
@@ -397,6 +500,7 @@
       $_SESSION['money'] = $f3->get('POST.money');
       $_SESSION['datetime_beg'] = $f3->get('POST.datetime_beg');
       $_SESSION['datetime_end'] = $f3->get('POST.datetime_end');
+      $_SESSION['participate_convoy'] = $f3->get('POST.participate_convoy');
       $_SESSION['files'] = $files;
       $view = new View;
       echo $view->render('./app/new_trip_add.php');
@@ -427,6 +531,7 @@
       echo $view->render('./app/trip_user.php');
     }
   );
+  /* Recrutation system */
   $f3->route('GET /register',
     function() {
       $view = new View;
@@ -481,6 +586,30 @@
       echo $view->render('./app/ui/application_sent.php');
     }
   );
+  $f3->route('POST /accept_recruit/@id',
+    function($f3) {
+      $_SESSION['recruit_id'] = $f3->get('PARAMS.id');
+      $_SESSION['user_id'] = $f3->get('POST.user_id');
+      $_SESSION['message'] = $f3->get('POST.message');
+      $view = new View;
+      echo $view->render('./app/accept_recruit.php');
+    }
+  );
+  $f3->route('GET /accepted_recruit',
+    function($f3) {
+      $_SESSION['success'] = 'accepted_recruit';
+      $f3->reroute('/recrutation');
+    }
+  );
+  $f3->route('POST /reject_recruit/@id',
+    function($f3) {
+      $_SESSION['recruit_id'] = $f3->get('PARAMS.id');
+      $_SESSION['message'] = $f3->get('POST.message');
+      $view = new View;
+      echo $view->render('./app/reject_recruit.php');
+    }
+  );
+  /* Password reset */
   $f3->route('GET /reset_password',
     function() {
       $view = new View;
@@ -504,78 +633,6 @@
     function($f3) {
       $_SESSION['error'] = $f3->get('PARAMS.error');
       $f3->reroute('/reset_password');
-    }
-  );
-  $f3->route('POST /accept_trip/@id',
-    function($f3) {
-      $_SESSION['trip_id'] = $f3->get('PARAMS.id');
-      $_SESSION['user_id'] = $f3->get('POST.user_id');
-      $_SESSION['message'] = $f3->get('POST.message');
-      $view = new View;
-      echo $view->render('./app/accept_trip.php');
-    }
-  );
-  $f3->route('GET /accepted_trip',
-    function($f3) {
-      $_SESSION['success'] = 'accepted_trip';
-      $f3->reroute('/trips_admin');
-    }
-  );
-  $f3->route('POST /accept_recruit/@id',
-    function($f3) {
-      $_SESSION['recruit_id'] = $f3->get('PARAMS.id');
-      $_SESSION['user_id'] = $f3->get('POST.user_id');
-      $_SESSION['message'] = $f3->get('POST.message');
-      $view = new View;
-      echo $view->render('./app/accept_recruit.php');
-    }
-  );
-  $f3->route('GET /accepted_recruit',
-    function($f3) {
-      $_SESSION['success'] = 'accepted_recruit';
-      $f3->reroute('/recrutation');
-    }
-  );
-  $f3->route('GET /user/@id',
-    function($f3) {
-      $_SESSION['user_id'] = $f3->get('PARAMS.id');
-      $view = new View;
-      echo $view->render('./app/single_user.php');
-    }
-  );
-  $f3->route('GET /delete_user/@id',
-    function($f3) {
-      $_SESSION['user_id'] = $f3->get('PARAMS.id');
-      $view = new View;
-      echo $view->render('./app/delete_user.php');
-    }
-  );
-  $f3->route('POST /deluser/@id',
-    function($f3) {
-      $_SESSION['user_id'] = $f3->get('PARAMS.id');
-      $_SESSION['reason'] = $f3->get('POST.reason');
-      $view = new View;
-      echo $view->render('./app/deluser.php');
-    }
-  );
-  $f3->route('GET /deluser_success',
-    function($f3) {
-      $_SESSION['success'] = 'deleted_user';
-      $f3->reroute('/list_users');
-    }
-  );
-  $f3->route('GET /change_role/@user_id/@role_id',
-    function($f3) {
-      $_SESSION['user_id'] = $f3->get('PARAMS.user_id');
-      $_SESSION['role_id'] = $f3->get('PARAMS.role_id');
-      $view = new View;
-      echo $view->render('./app/change_role.php');
-    }
-  );
-  $f3->route('GET /modrole_success',
-    function($f3) {
-      $_SESSION['success'] = 'mod_role';
-      $f3->reroute('/list_users');
     }
   );
   $f3->route('GET /set_password/@hash',
@@ -606,19 +663,7 @@
       $f3->reroute('/login');
     }
   );
-  $f3->route('POST /pass_reset_admin',
-    function($f3) {
-      $_SESSION['email'] = $f3->get('POST.email');
-      $view = new View;
-      echo $view->render('./app/pass_reset_admin.php');
-    }
-  );
-  $f3->route('GET /list_users/reset_pass',
-    function($f3) {
-      $_SESSION['success'] = 'reset_pass';
-      $f3->reroute('/list_users');
-    }
-  );
+  /* Settings (user) */
   $f3->route('GET /settings',
     function() {
       $view = new View;
@@ -697,12 +742,14 @@
       $f3->reroute('/settings');
     }
   );
+  /* Notifications (marked as read) */
   $f3->route('GET /notifications_read',
     function() {
       $view = new View;
       echo $view->render('./app/notifications_read.php');
     }
   );
+  /* Report of user */
   $f3->route('POST /generate_report_user',
     function($f3) {
       $_SESSION['user_id'] = $f3->get('POST.user_id');
@@ -718,6 +765,7 @@
       echo $view->render('./app/ui/generate_report.php');
     }
   );
+  /* Installer & Upgrader */
   $f3->route('GET /installer',
     function($f3) {
       if(file_exists('./LOCK'))
@@ -731,6 +779,61 @@
       }
     }
   );
+  $f3->route('POST /install',
+    function($f3) {
+      $_SESSION['admin_nickname'] = $f3->get('POST.nickname');
+      $_SESSION['admin_email'] = $f3->get('POST.email');
+      $_SESSION['db_name'] = $f3->get('POST.db_name');
+      $_SESSION['db_nickname'] = $f3->get('POST.db_nickname');
+      $_SESSION['db_pass'] = $f3->get('POST.db_pass');
+      $_SESSION['db_host'] = $f3->get('POST.db_host');
+      $_SESSION['smtp_email'] = $f3->get('POST.smtp_email');
+      $_SESSION['smtp_pass'] = $f3->get('POST.smtp_pass');
+      $_SESSION['smtp_method'] = $f3->get('POST.smtp_method');
+      $_SESSION['smtp_port'] = $f3->get('POST.smtp_port');
+      $_SESSION['smtp_host'] = $f3->get('POST.smtp_host');
+      $_SESSION['vtc_name'] = $f3->get('POST.vtc_name');
+      $_SESSION['vtc_logo'] = $f3->get('POST.vtc_logo');
+      $_SESSION['vtc_slogan'] = $f3->get('POST.vtc_slogan');
+      $_SESSION['vtc_tmpid'] = $f3->get('POST.vtc_tmpid');
+      $_SESSION['api_key'] = $f3->get('POST.api_key');
+      $view = new View;
+      echo $view->render('./app/install.php');
+    }
+  );
+  $f3->route('GET /installer/success',
+    function($f3){
+      $_SESSION['success_install'] = true;
+      $f3->reroute('/');
+    }
+  );
+  $f3->route('GET /upgrader',
+    function($f3) {
+      if(file_exists('./LOCK'))
+      {
+        $f3->reroute('/');
+      }
+      else
+      {
+        $view = new View;
+        echo $view->render('./app/ui/upgrader.php');
+      }
+    }
+  );
+  $f3->route('POST /upgrade',
+    function($f3) {
+      $_SESSION['version'] = $f3->get('POST.version');
+      $view = new View;
+      echo $view->render('./app/upgrade.php');
+    }
+  );
+  $f3->route('GET /upgrader/success',
+    function($f3){
+      $_SESSION['success_upgrade'] = true;
+      $f3->reroute('/');
+    }
+  );
+  /* Loads */
   $f3->route('GET /loads',
     function() {
       $view = new View;
@@ -764,55 +867,125 @@
       $f3->reroute('/loads');
     }
   );
-  $f3->route('GET /delete_role/@id',
+  $f3->route('GET /delete_load/@id',
     function($f3) {
       $_SESSION['load_id'] = $f3->get('PARAMS.id');
       $view = new View;
       echo $view->render('./app/delete_load.php');
     }
   );
-  $f3->route('GET /rejected_trip',
-    function($f3) {
-      $_SESSION['success'] = 'rejected_trip';
-      $f3->reroute('/trips_admin');
+  /* Convoy system */
+  $f3->route('GET /list_convoys',
+    function($f3){
+      $view = new View;
+      echo $view->render('./app/ui/list_convoys.php');
     }
   );
-  $f3->route('POST /reject_trip/@id',
-    function($f3) {
-      $_SESSION['trip_id'] = $f3->get('PARAMS.id');
-      $_SESSION['user_id'] = $f3->get('POST.user_id');
-      $_SESSION['message'] = $f3->get('POST.message');
+  $f3->route('GET /delete_convoy/@id',
+    function($f3){
+      $_SESSION['convoy_id'] = $f3->get('PARAMS.id');
       $view = new View;
-      echo $view->render('./app/reject_trip.php');
+      echo $view->render('./app/delete_convoy.php');
     }
   );
-  $f3->route('POST /reject_recruit/@id',
-    function($f3) {
-      $_SESSION['recruit_id'] = $f3->get('PARAMS.id');
-      $_SESSION['message'] = $f3->get('POST.message');
+  $f3->route('GET /convoy/@id',
+    function($f3){
+      $_SESSION['convoy_id'] = $f3->get('PARAMS.id');
       $view = new View;
-      echo $view->render('./app/reject_trip.php');
+      echo $view->render('./app/single_convoy.php');
     }
   );
-  $f3->route('POST /install',
-    function($f3) {
-      $_SESSION['admin_nickname'] = $f3->get('POST.nickname');
-      $_SESSION['admin_email'] = $f3->get('POST.email');
-      $_SESSION['db_name'] = $f3->get('POST.db_name');
-      $_SESSION['db_nickname'] = $f3->get('POST.db_nickname');
-      $_SESSION['db_pass'] = $f3->get('POST.db_pass');
-      $_SESSION['db_host'] = $f3->get('POST.db_host');
-      $_SESSION['smtp_email'] = $f3->get('POST.smtp_email');
-      $_SESSION['smtp_pass'] = $f3->get('POST.smtp_pass');
-      $_SESSION['smtp_method'] = $f3->get('POST.smtp_method');
-      $_SESSION['smtp_port'] = $f3->get('POST.smtp_port');
-      $_SESSION['smtp_host'] = $f3->get('POST.smtp_host');
-      $_SESSION['vtc_name'] = $f3->get('POST.vtc_name');
-      $_SESSION['vtc_logo'] = $f3->get('POST.vtc_logo');
-      $_SESSION['vtc_slogan'] = $f3->get('POST.vtc_slogan');
-      $_SESSION['vtc_tmpid'] = $f3->get('POST.vtc_tmpid');
-      $_SESSION['api_key'] = $f3->get('POST.api_key');
+  $f3->route('GET /add_convoy',
+    function($f3){
       $view = new View;
-      echo $view->render('./app/install.php');
+      echo $view->render('./app/ui/addconvoy.php');
+    }
+  );
+  $f3->route('POST /new_convoy_add',
+    function($f3) {
+      $_SESSION['name'] = $f3->get('POST.name');
+      $_SESSION['date'] = $f3->get('POST.date');
+      $_SESSION['time_beg'] = $f3->get('POST.time_beg');
+      $_SESSION['time_groupup'] = $f3->get('POST.time_groupup');
+      $_SESSION['game'] = $f3->get('POST.game');
+      $_SESSION['from_city'] = $f3->get('POST.from_city');
+      $_SESSION['from_company'] = $f3->get('POST.from_company');
+      $_SESSION['to_city'] = $f3->get('POST.to_city');
+      $_SESSION['to_company'] = $f3->get('POST.to_company');
+      $_SESSION['server_game'] = $f3->get('POST.server_game');
+      $_SESSION['server_voip'] = $f3->get('POST.server_voip');
+      $_SESSION['route'] = $f3->get('POST.route');
+      $_SESSION['image_start'] = $f3->get('POST.image_start');
+      $_SESSION['image_end'] = $f3->get('POST.image_end');
+      $_SESSION['rules'] = $f3->get('POST.rules');
+      $_SESSION['private'] = $f3->get('POST.private');
+      $view = new View;
+      echo $view->render('./app/new_convoy_add.php');
+    }
+  );
+  $f3->route('GET /add_convoy/@error',
+    function($f3){
+      $_SESSION['error'] = $f3->get('PARAMS.error');
+      $f3->reroute('/add_convoy');
+    }
+  );
+  $f3->route('GET /addconvoy_success',
+    function($f3) {
+      $_SESSION['success'] = 'add_convoy';
+      $f3->reroute('/list_convoys');
+    }
+  );
+  $f3->route('GET /delconvoy_success',
+    function($f3) {
+      $_SESSION['success'] = 'del_convoy';
+      $f3->reroute('/list_convoys');
+    }
+  );
+  $f3->route('GET /modconvoy_success',
+    function($f3) {
+      $_SESSION['success'] = 'mod_convoy';
+      $f3->reroute('/list_convoys');
+    }
+  );
+  $f3->route('GET /edit_convoy/@id',
+    function($f3) {
+      $_SESSION['convoy_id'] = $f3->get('PARAMS.id');
+      $view = new View;
+      echo $view->render('./app/ui/editconvoy.php');
+    }
+  );
+  $f3->route('POST /mod_convoy',
+    function($f3) {
+      $_SESSION['convoy_id'] = $f3->get('POST.id');
+      $_SESSION['server_game'] = $f3->get('POST.server_game');
+      $_SESSION['server_voip'] = $f3->get('POST.server_voip');
+      $_SESSION['route'] = $f3->get('POST.route');
+      $_SESSION['image_start'] = $f3->get('POST.image_start');
+      $_SESSION['image_end'] = $f3->get('POST.image_end');
+      $_SESSION['rules'] = $f3->get('POST.rules');
+      $_SESSION['private'] = $f3->get('POST.private');
+      $view = new View;
+      echo $view->render('./app/mod_convoy.php');
+    }
+  );
+  $f3->route('GET /mod_convoy/@id/@error',
+    function($f3){
+      $_SESSION['error'] = $f3->get('PARAMS.error');
+      $id = $_SESSION['convoy_id'] = $f3->get('PARAMS.id');
+      $f3->reroute('/edit_convoy/'.$id);
+    }
+  );
+  $f3->route('GET /convoys',
+    function($f3){
+      if(isset($_SESSION['nickname']))
+      {
+        $view = new View;
+        echo $view->render('./app/ui/convoys_user.php');
+      }
+      else
+      {
+        $view = new View;
+        echo $view->render('./app/ui/convoys_nonuser.php');
+      }
     }
   );

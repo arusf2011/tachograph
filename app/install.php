@@ -731,9 +731,10 @@
             if($result2)
             {
                 $f3->set('result3',$db->exec('CREATE TABLE `dlcs` (
-                    `id` int(11) NOT NULL,
+                    `id` int(11) NOT NULL AUTO_INCREMENT,
                     `name` varchar(50) NOT NULL,
-                    `short_name` varchar(50) NOT NULL
+                    `short_name` varchar(50) NOT NULL,
+                    PRIMARY KEY(`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;'));
                 $f3->set('result3',$db->exec('INSERT INTO `dlcs` (`id`, `name`, `short_name`) VALUES
                 (1, "ETS2 - Going East!", "dlc_goingeast"),
@@ -1231,8 +1232,29 @@
                             `status` int(11) NOT NULL,
                             `id_user` int(11) NOT NULL,
                             `id_admin` int(11) NOT NULL,
+                            `participate_convoy` int(11) NOT NULL,
                             PRIMARY KEY(`id`)
                           ) ENGINE=InnoDB DEFAULT CHARSET=utf8'));
+                        $f3->set('result5',$db->exec('CREATE TABLE `convoys` ( 
+                            `id` INT NOT NULL AUTO_INCREMENT, 
+                            `c_start` VARCHAR(50) NOT NULL, 
+                            `comp_start` VARCHAR(50) NOT NULL, 
+                            `c_end` VARCHAR(50) NOT NULL, 
+                            `comp_end` VARCHAR(50) NOT NULL, 
+                            `name` VARCHAR(100) NOT NULL, 
+                            `game` BOOLEAN NOT NULL, 
+                            `date_beg_convoy` DATE NOT NULL, 
+                            `time_beg_convoy` TIME NOT NULL, 
+                            `time_groupup` TIME NOT NULL, 
+                            `server_game` VARCHAR(50) NOT NULL, 
+                            `server_voip` VARCHAR(100) NULL, 
+                            `route` VARCHAR(100) NULL, 
+                            `image_start` VARCHAR(100) NULL, 
+                            `image_end` VARCHAR(100) NULL, 
+                            `rules` VARCHAR(1000) NULL, 
+                            `private` BOOLEAN NOT NULL, 
+                            PRIMARY KEY (`id`)
+                        ) ENGINE = InnoDB DEFAULT CHARSET=utf8;'));
                         $f3->set('result5',$db->exec('CREATE TABLE `trucks` (
                             `id` int(11) NOT NULL AUTO_INCREMENT,
                             `name` varchar(50) NOT NULL,
@@ -1262,7 +1284,8 @@
                         (19, "Kenworth T680", "kenworth_t680", 1),
                         (20, "Peterbilt 389", "peterbilt_389", 1),
                         (21, "Peterbilt 579", "peterbilt_579", 1),
-                        (22, "Volvo VNL", "volvo_vnl", 1)'));
+                        (22, "Volvo VNL", "volvo_vnl", 1),
+                        (23, "International Lonestar", "inter_lone", 1)'));
                         $f3->set('result5',$db->exec('CREATE TABLE `users` (
                             `id` int(11) NOT NULL AUTO_INCREMENT,
                             `nickname` varchar(50) NOT NULL,

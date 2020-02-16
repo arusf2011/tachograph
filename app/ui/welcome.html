@@ -1,12 +1,19 @@
 <?php
-$f3=Base::instance();
-$f3->set('global_settings',$db->exec('SELECT * FROM settings'));
-$global_settings = $f3->get('global_settings');
+	session_start();
+	$f3=Base::instance();
+	$f3->set('global_settings',$db->exec('SELECT * FROM settings'));
+	$global_settings = $f3->get('global_settings');
+	if(isset($_SESSION['nickname']))
+    {
+      header('Location: ./dashboard');
+    }
 ?>
 <html>
 	<head>
 		<title><?php echo $f3->get('homepage_title'); ?></title>
 		<link href="./css/main.css" rel="stylesheet"/>
+		<!-- Custom fonts for this template-->
+		<script src="https://kit.fontawesome.com/dd99fb3228.js"></script>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	</head>
 	<body>
@@ -15,20 +22,75 @@ $global_settings = $f3->get('global_settings');
 		<h3><?= $global_settings[2]['value'] ?></h3>
 	</div>
 	<div class="container-fluid">
+		<?php
+			if(isset($_SESSION['success_install']))
+			{
+				?>
+					<div class="alert alert-success text-center">
+						<?= $f3->get('success_install') ?>
+					</div>
+				<?php
+				unset($_SESSION['success_install']);
+			}
+			else if(isset($_SESSION['success_upgrade']))
+			{
+				?>
+					<div class="alert alert-success text-center">
+						<?= $f3->get('success_upgrade') ?>
+					</div>
+				<?php
+				unset($_SESSION['success_upgrade']);
+			}
+		?>
 		<div class="row">
 			<div class="col-sm-6 text-center">
 				<p><?php echo $f3->get('homepage_isuser'); ?></p>
-				<a href="./login" class="btn btn-success"><?php echo $f3->get('signin'); ?>!</a>
+				<a href="./login" class="btn btn-success"><i class="fas fa-sign-in-alt"></i> <?php echo $f3->get('signin'); ?>!</a>
 			</div>
 			<div class="col-sm-6 text-center">
 				<p><?php echo $f3->get('homepage_recruit'); ?></p>
-				<a href="./register" class="btn btn-success"><?php echo $f3->get('homepage_recruit_but'); ?></a>
+				<a href="./register" class="btn btn-success"><i class="far fa-id-badge"></i> <?php echo $f3->get('homepage_recruit_but'); ?></a>
 			</div>
 		</div>
-		<br>&nbsp;<br>
+		<hr>
+		<div class="container mt-4">
+			<div class="row">
+				<div class="col">
+					<h2><i class="far fa-newspaper"></i> <?= $f3->get('news') ?></h2>
+				</div>
+				<div class="col text-right">
+					<a href="./convoys" class="btn btn-primary"><i class="fas fa-truck"></i> <?= $f3->get('convoys') ?></a>
+				</div>
+			</div>
+			<hr>
+			<?php
+				$url_news = file_get_contents('https://api.truckersmp.com/v2/vtc/'.intval($global_settings[3]['value']).'/news');
+				$news_arr = json_decode($url_news);
+				$news_response = $news_arr->response;
+				$i = 0;
+				foreach($news_response->news as $news)
+				{
+					if($i == 3)
+					{
+						break;
+					}
+					else
+					{
+						?>
+							<article class="mt-3">
+								<h3><?= $news->title ?></h3>
+								<p><?= $news->content_summary ?></p>
+								<a href="https://truckersmp.com/vtc/<?= intval($global_settings[3]['value']) ?>/news/<?= $news->id ?>" class="btn btn-info"><?= $f3->get('read_more') ?></a>
+							</article>
+						<?php
+						$i++;
+					}
+				}
+			?>
+		</div>
 	</div>
-	<footer class="container-fluid bg-dark text-light text-center">
-		<p>Made with <3 by Arkadiusz Fatyga</p>
+	<footer class="container-fluid bg-dark text-light text-center mt-3">
+		<p>Made with <i class="far fa-heart"></i> by Arkadiusz Fatyga</p>
 		<p>Powered by Fat-Free Framework</p>
 	</footer>
 	</body>

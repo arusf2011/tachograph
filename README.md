@@ -1,5 +1,5 @@
 # Tachograph v2 for ETS2 & ATS
-Version `1.0`
+Version `1.1`
 
 Tachograph made by Arkadiusz Fatyga with use of Fat-Free Framework, Bootstrap 4 and Font Awesome 5.
 
@@ -23,7 +23,7 @@ In order to use this script, you need to fit the following requirements:
 ## Reporting of the bugs/issues
 If you'll need to report a bug or an issue, go to the "Issues" tab here on GitHub (if you have account).
 
-If you don't have account on GitHub, send me an email - kontakt@arkadiusz-fatyga.eu
+If you don't have account on GitHub, send me an email - arkadiuszfatyga@outlook.com
 
 ## Demo
 For now demo site isn't available.

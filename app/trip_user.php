@@ -17,6 +17,8 @@
     $comp_to = $f3->get('comp_to');
     $f3->set('trip_user_nickname',$db->exec('SELECT nickname FROM users WHERE id = "'.$trip[0]['id_user'].'"'));
     $trip_user_nickname = $f3->get('trip_user_nickname');
+    $f3->set('convoy_name',$db->exec('SELECT name FROM convoys WHERE id = '.$trip[0]['participate_convoy']));
+    $convoy_name = $f3->get('convoy_name');
     switch($trip[0]['game'])
     {
         case 0:
@@ -81,6 +83,7 @@
 		<p class="small text-primary mb-1"><b><?= $f3->get('average_use_of_fuel').' -</b> '.round($avg_fuel,1).' '.$global_settings[5]['value'].'/100 '.$global_settings[4]['value'] ?></p>
         <p class="small text-primary mb-1"><b><?= $f3->get('gained_money').' -</b> '.$trip[0]['money'].' '.$global_settings[7]['value'] ?></p>
         <p class="small text-primary mb-1"><b><?= $f3->get('damage').' -</b> '.$trip[0]['damage'].'%' ?></p>
+        <p class="small text-primary mb-1"><b><?= $f3->get('participated_convoy').' '.$convoy_name[0]['name'] ?></b></p>
         <p class="small text-primary mb-1"><b><?= $f3->get('image_end') ?></b></p>
 		<img src="<?= $trip[0]['image_end'] ?>" class="img-fluid image_end" id="image_end_img">
         <script>

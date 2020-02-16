@@ -27,7 +27,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title><?php echo $f3->get('dashboard_addtrip_title'); ?></title>
+  <title><?php echo $f3->get('dashboard_generate_report'); ?></title>
 
   <!-- Custom fonts for this template-->
   <script src="https://kit.fontawesome.com/dd99fb3228.js"></script>
@@ -100,6 +100,20 @@
           </div>
         </li>
 
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#convoys" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-truck-moving"></i>
+            <span><?php echo $f3->get('convoys'); ?></span>
+          </a>
+          <div id="convoys" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <a class="collapse-item" href="./list_convoys"><i class="fas fa-list-alt fa-fw"></i> <?php echo $f3->get('list'); ?></a>
+              <a class="collapse-item" href="./add_convoy"><i class="far fa-plus-square fa-fw"></i> <?php echo $f3->get('add'); ?></a>
+            </div>
+          </div>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
@@ -148,6 +162,14 @@
             <a class="collapse-item" href="./trips_user"><i class="fas fa-clipboard-list fa-fw"></i> <?= $f3->get('list') ?></a>
           </div>
         </div>
+      </li>      
+      
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link" href="./convoys">
+          <i class="fas fa-fw fa-truck-moving"></i>
+          <span><?php echo $f3->get('convoys'); ?></span>
+        </a>
       </li>
 
       <!-- Divider -->
@@ -397,7 +419,7 @@
       <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Made with <3 by <a href="https://arkadiusz-fatyga.eu" target="_blank">Arkadiusz Fatyga</a> | <a href="https://github.com/arusf2011/tachograph" target="_blank">Version 1.0</a></span><br>
+            <span>Made with <3 by <a href="https://arkadiusz-fatyga.eu" target="_blank">Arkadiusz Fatyga</a> | <a href="https://github.com/arusf2011/tachograph" target="_blank">Version 1.1</a></span><br>
             <span id="copyright">Copyright &copy; <script> var data = new Date(); var copyright = document.getElementById('copyright'); copyright.innerHTML = copyright.innerHTML + data.getFullYear();</script></span>
           </div>
         </div>

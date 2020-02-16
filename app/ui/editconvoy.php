@@ -1,8 +1,6 @@
 <?php
   $f3=Base::instance();
   session_start();
-  $f3->set('loads_arr',$db->exec('SELECT * FROM load_tonnage'));
-  $loads = $f3->get('loads_arr');
   $f3->set('global_settings_arr',$db->exec('SELECT * FROM settings'));
   $global_settings = $f3->get('global_settings_arr');
   if(!isset($_SESSION['nickname']))
@@ -19,9 +17,23 @@
   $role = $user_data[0]['role_id'];
   if($roles[$role-1]['admin'] == false)
   {
-    header('Location: ./dashboard');
-    exit();
+      header('Location: ./dashboard');
+      exit();
   }
+  $f3->set('convoy_data',$db->exec('SELECT * FROM convoys WHERE id = ?',$_SESSION['convoy_id']));
+  $convoy_data = $f3->get('convoy_data');
+
+  $f3->set('c_start_name',$db->exec('SELECT name FROM cities WHERE short_name = "'.$convoy_data[0]['c_start'].'"'));
+  $c_start_name = $f3->get('c_start_name');
+
+  $f3->set('comp_start_name',$db->exec('SELECT name FROM companies WHERE short_name = "'.$convoy_data[0]['comp_start'].'"'));
+  $comp_start_name = $f3->get('comp_start_name');
+
+  $f3->set('c_end_name',$db->exec('SELECT name FROM cities WHERE short_name = "'.$convoy_data[0]['c_end'].'"'));
+  $c_end_name = $f3->get('c_end_name');
+
+  $f3->set('comp_end_name',$db->exec('SELECT name FROM companies WHERE short_name = "'.$convoy_data[0]['comp_end'].'"'));
+  $comp_end_name = $f3->get('comp_end_name');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,17 +46,17 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title><?php echo $f3->get('dashboard_loads_title'); ?></title>
+  <title><?php echo $f3->get('dashboard_modconvoy_title'); ?></title>
 
   <!-- Custom fonts for this template-->
   <script src="https://kit.fontawesome.com/dd99fb3228.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link href="./css/sb-admin-2.min.css" rel="stylesheet">
-  <link href="./css/main.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="./css/dataTables.bootstrap4.min.css">
+  <link href="./../css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="./../css/main.css" rel="stylesheet">
+  <link rel="stylesheet" href="./../css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="./../css/gijgo.min.css">
 
 </head>
 
@@ -69,7 +81,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="./dashboard">
+        <a class="nav-link" href="./../dashboard">
           <i class="fas fa-fw fa-columns"></i>
           <span><?php echo $f3->get('main_page'); ?></span></a>
       </li>
@@ -83,7 +95,7 @@
       </div>
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link" href="./trips_admin">
+        <a class="nav-link" href="./../trips_admin">
           <i class="far fa-fw fa-list-alt"></i>
           <span><?php echo $f3->get('trips'); ?></span>
         </a>
@@ -91,53 +103,53 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-users"></i>
           <span><?php echo $f3->get('users'); ?></span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="./list_users"><i class="fas fa-list-alt fa-fw"></i> <?php echo $f3->get('list'); ?></a>
-            <a class="collapse-item" href="./add_user"><i class="fas fa-user-plus fa-fw"></i> <?php echo $f3->get('add'); ?></a>
-            <a class="collapse-item" href="./roles"><i class="fas fa-user-shield fa-fw"></i> <?php echo $f3->get('roles'); ?></a>
+            <a class="collapse-item" href="./../list_users"><i class="fas fa-list-alt fa-fw"></i> <?php echo $f3->get('list'); ?></a>
+            <a class="collapse-item" href="./../add_user"><i class="fas fa-user-plus fa-fw"></i> <?php echo $f3->get('add'); ?></a>
+            <a class="collapse-item" href="./../roles"><i class="fas fa-user-shield fa-fw"></i> <?php echo $f3->get('roles'); ?></a>
           </div>
         </div>
       </li>
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#convoys" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#convoys" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-truck-moving"></i>
           <span><?php echo $f3->get('convoys'); ?></span>
         </a>
-        <div id="convoys" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="convoys" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="./list_convoys"><i class="fas fa-list-alt fa-fw"></i> <?php echo $f3->get('list'); ?></a>
-            <a class="collapse-item" href="./add_convoy"><i class="far fa-plus-square fa-fw"></i> <?php echo $f3->get('add'); ?></a>
+            <a class="collapse-item active" href="./../list_convoys"><i class="fas fa-list-alt fa-fw"></i> <?php echo $f3->get('list'); ?></a>
+            <a class="collapse-item" href="./../add_convoy"><i class="far fa-plus-square fa-fw"></i> <?php echo $f3->get('add'); ?></a>
           </div>
         </div>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span><?php echo $f3->get('settings_lang'); ?></span>
         </a>
-        <div id="collapseThree" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="./cities"><i class="fas fa-city fa-fw"></i> <?php echo $f3->get('cities'); ?></a>
-            <a class="collapse-item" href="./companies"><i class="fas fa-building fa-fw"></i> <?php echo $f3->get('companies'); ?></a>
-            <a class="collapse-item" href="./dlcs"><i class="fas fa-file-download fa-fw"></i> <?php echo $f3->get('dlcs'); ?></a>
-            <a class="collapse-item" href="./trucks"><i class="fas fa-truck fa-fw"></i> <?php echo $f3->get('trucks'); ?></a>
-            <a class="collapse-item active" href="./loads"><i class="fas fa-truck-loading fa-fw"></i> <?php echo $f3->get('loads'); ?></a>
-            <a class="collapse-item" href="./global_settings"><i class="fas fa-edit fa-fw"></i> <?php echo $f3->get('global_settings'); ?></a>
+            <a class="collapse-item" href="./../cities"><i class="fas fa-city fa-fw"></i> <?php echo $f3->get('cities'); ?></a>
+            <a class="collapse-item" href="./../companies"><i class="fas fa-building fa-fw"></i> <?php echo $f3->get('companies'); ?></a>
+            <a class="collapse-item" href="./../dlcs"><i class="fas fa-file-download fa-fw"></i> <?php echo $f3->get('dlcs'); ?></a>
+            <a class="collapse-item" href="./../trucks"><i class="fas fa-truck fa-fw"></i> <?php echo $f3->get('trucks'); ?></a>
+            <a class="collapse-item" href="./../loads"><i class="fas fa-truck-loading fa-fw"></i> <?php echo $f3->get('loads'); ?></a>
+            <a class="collapse-item" href="./../global_settings"><i class="fas fa-edit fa-fw"></i> <?php echo $f3->get('global_settings'); ?></a>
           </div>
         </div>
       </li>
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link" href="./recrutation">
+        <a class="nav-link" href="./../recrutation">
           <i class="fas fa-fw fa-address-card"></i>
           <span><?php echo $f3->get('recrutation'); ?></span>
         </a>
@@ -161,15 +173,15 @@
         </a>
         <div id="trips" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="./add_trip"><i class="fas fa-plus-square fa-fw"></i> <?= $f3->get('add_trip') ?></a>
-            <a class="collapse-item" href="./trips_user"><i class="fas fa-clipboard-list fa-fw"></i> <?= $f3->get('list') ?></a>
+            <a class="collapse-item" href="./../add_trip"><i class="fas fa-plus-square fa-fw"></i> <?= $f3->get('add_trip') ?></a>
+            <a class="collapse-item" href="./../trips_user"><i class="fas fa-clipboard-list fa-fw"></i> <?= $f3->get('list') ?></a>
           </div>
         </div>
       </li>
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link" href="./convoys">
+        <a class="nav-link" href="./../convoys">
           <i class="fas fa-fw fa-truck-moving"></i>
           <span><?php echo $f3->get('convoys'); ?></span>
         </a>
@@ -204,7 +216,7 @@
           <ul class="navbar-nav ml-auto">
 
              <!-- Nav Item - Alerts -->
-             <li class="nav-item dropdown no-arrow mx-1">
+            <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
@@ -325,12 +337,12 @@
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   <?php echo $f3->get('profile'); ?>
                 </a> -->
-                <a class="dropdown-item" href="./settings">
+                <a class="dropdown-item" href="./../settings">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   <?php echo $f3->get('settings'); ?>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="./signout" data-toggle="modal" data-target="#logoutModal">
+                <a class="dropdown-item" href="./../signout" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   <?php echo $f3->get('sign_out'); ?>
                 </a>
@@ -344,25 +356,8 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          <?php
-            if(isset($_SESSION['success']) && $_SESSION['success'] == 'add_load')
-            {
-              ?>
-                <div class="alert alert-success">
-                  <?= $f3->get('addload_success') ?>
-                </div>
-              <?php
-              unset($_SESSION['success']);
-            }
-            else if(isset($_SESSION['success']) && $_SESSION['success'] == 'del_load')
-            {
-              ?>
-                <div class="alert alert-success">
-                  <?= $f3->get('delload_success') ?>
-                </div>
-              <?php
-              unset($_SESSION['success']);
-            }
+          <h1 class="page-title"><?php echo $f3->get('modconvoy') ?></h1>
+          <?php 
             if(isset($_SESSION['error']) && $_SESSION['error'] == '1')
             {
               ?>
@@ -370,62 +365,70 @@
               <?php
             }
           ?>
-          <div class="card shadow border-primary">
-            <div class="card-header">
-              <h1 class="h3 text-gray-800"><?php echo $f3->get('loads'); ?></h1>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table id="dataTable" class="display table table-striped table-bordered" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th><?= $f3->get('short_name') ?></th>
-                      <th><?= $f3->get('game') ?></th>
-                      <th><?= $f3->get('tonnage') ?></th>
-                      <th><?= $f3->get('actions') ?></th>
-                    </tr>
-                  </thead>
-                  <tbody>
+          <form method="POST" action="./../mod_convoy">
+            <div class="row">
+                <div class="col">
+                  <input type="hidden" name="id" value="<?= $_SESSION['convoy_id'] ?>">
+                  <label for="name" class="mt-2"><?php echo $f3->get('name') ?></label>
+                  <input type="text" class="form-control" name="name" value="<?= $convoy_data[0]['name'] ?>" readonly>
+                  <label for="datepicker" class="mt-3"><?= $f3->get('date') ?></label>
+                  <input type="text" class="form-control" readonly value="<?= date($global_settings[8]['value'],strtotime($convoy_data[0]['date_beg_convoy'])) ?>">
+                  <label for="timepicker1" class="mt-3"><?= $f3->get('time_beg_convoy') ?></label>
+                  <input type="text" class="form-control" readonly value="<?= date($global_settings[9]['value'],strtotime($convoy_data[0]['time_beg_convoy'])) ?>">
+                  <label for="timepicker2" class="mt-3"><?= $f3->get('time_groupup') ?></label>
+                  <input type="text" class="form-control" readonly value="<?= date($global_settings[9]['value'],strtotime($convoy_data[0]['groupup'])) ?>">
+                  <label for="server_game" class="mt-2"><?php echo $f3->get('server_game') ?></label>
+                  <select class="form-control" name="server_game" id="server">
+                    <option value="" <?php if($convoy_data[0]['server_game'] == '') echo 'selected'; ?> ><?= $f3->get('unselected') ?></option>
                     <?php
-                      foreach($loads as $load)
+                      $url_servers = file_get_contents('https://api.truckersmp.com/v2/servers');
+                      $servers = json_decode($url_servers);
+                      foreach($servers->response as $server)
                       {
-                        ?>
-                        <tr>
-                          <td><?= $load['id'] ?></td>
-                          <td><?= $load['short_name'] ?></td>
-                          <td><?php if($load['game'] == false) echo 'ETS2'; else echo 'ATS' ?></td>
-                          <td><?= $load['tonnage'] ?></td>
-                          <td class="text-center"><a href="./delete_load/<?= $load['id'] ?>"><button class="btn btn-danger"><i class="fas fa-trash"></i> <?= $f3->get('delete') ?></button></a></td>
-                        </tr>
-                        <?php
+                        if($convoy_data[0]['server_game'] == $server->shortname)
+                        {
+                          echo '<option value="'.$server->shortname.'" selected>'.$server->game.' - '.$server->name.'</option>';
+                        }
+                        else
+                        {
+                          echo '<option value="'.$server->shortname.'">'.$server->game.' - '.$server->name.'</option>';
+                        }
                       }
                     ?>
-                  </tbody>
-                </table>
-              </div>
-              <hr>
-              <h4><b><?= $f3->get('add_load') ?></b></h4>
-              <div class="form-inline">
-                <form method="POST" action="./new_load">
-                  <p>
-                    <input type="text" class="form-control" name="short_name" placeholder="<?= $f3->get('short_name') ?>">
-                    <select name="game" class="form-control">
-                      <option value=""><?= $f3->get('game') ?></option>
-                      <option value="0">ETS2</option>
-                      <option value="1">ATS</option>
-                    <input type="text" class="form-control" name="tonnage" placeholder="<?= $f3->get('tonnage') ?>">
-                    </select>
-                    <button type="submit" class="btn btn-success">
-                      <i class="fas fa-plus"></i> <?= $f3->get('add') ?>
-                    </button>
-                  </p>
-                </form>
-              </div>
+                    <option value="ETS2 Event" <?php if($convoy_data[0]['server_game'] == 'ETS2 Event') echo 'selected'; ?> >ETS2 - Event</option>
+                    <option value="ATS Event" <?php if($convoy_data[0]['server_game'] == 'ATS Event') echo 'selected'; ?> >ATS - Event</option>
+                  </select>
+                  <label for="server_voip" class="mt-2"><?php echo $f3->get('server_voip') ?>&nbsp;<small><?= $f3->get('post_url_voip') ?></small></label>
+                  <input type="text" name="server_voip" id="server_voip" class="form-control" value="<?= $convoy_data[0]['server_voip'] ?>">
+                  <label for="route" class="mt-2"><?= $f3->get('route') ?>&nbsp;<small><?= $f3->get('post_url_image') ?></small></label>
+                  <input type="text" name="route" id="route" class="form-control" value="<?= $convoy_data[0]['route'] ?>">
+                  <label for="route" class="mt-2"><?= $f3->get('convoy_is_private') ?></label>
+                  <select name="private" id="private" class="form-control">
+                      <option value="0" <?php if($convoy_data[0]['private'] == false) echo 'selected' ?> ><?= $f3->get('no') ?></option>
+                      <option value="1" <?php if($convoy_data[0]['private'] == true) echo 'selected' ?> ><?= $f3->get('yes') ?></option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="game" class="mt-2"><?= $f3->get('game') ?></label>
+                  <input type="text" class="form-control" readonly value="<?php if($convoy_data[0]['game'] == false) echo 'ETS2'; else echo 'ATS'; ?>">
+                  <label for="from_city" class="mt-2"><?php echo $f3->get('from') ?></label>
+                  <input type="text" class="form-control" readonly value="<?= $c_start_name[0]['name'] ?>">
+                  <input type="text" class="form-control" readonly value="<?= $comp_start_name[0]['name'] ?>">
+                  <label for="to_city" class="mt-2"><?php echo $f3->get('to') ?></label>
+                  <input type="text" class="form-control" readonly value="<?= $c_end_name[0]['name'] ?>">
+                  <input type="text" class="form-control" readonly value="<?= $comp_end_name[0]['name'] ?>">
+                  <label for="image_start" class="mt-2"><?= $f3->get('start_convoy') ?>&nbsp;<small><?= $f3->get('post_url_image') ?></small></label>
+                  <input type="text" name="image_start" id="image_start" class="form-control" value="<?= $convoy_data[0]['image_start'] ?>">
+                  <label for="image_end" class="mt-2"><?= $f3->get('end_convoy') ?>&nbsp;<small><?= $f3->get('post_url_image') ?></small></label>
+                  <input type="text" name="image_end" id="image_end" class="form-control" value="<?= $convoy_data[0]['image_end'] ?>">
+                  <label for="rules" class="mt-2"><?= $f3->get('rules') ?></label>
+                  <textarea class="form-control" name="rules" id="rules"><?= $convoy_data[0]['rules'] ?></textarea>
+                </div>
             </div>
-          </div>
-        <!-- /.container-fluid -->
-
+            <div class="text-center mt-3">
+              <button class="btn btn-success"><i class="fas fa-edit"></i> <?php echo $f3->get('modconvoy') ?></button>
+            </div>
+          </form>
         </div>
       </div>
       <!-- End of Main Content -->
@@ -465,55 +468,41 @@
         <div class="modal-body"><?php echo $f3->get('logout_popup_content'); ?></div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal"><?php echo $f3->get('cancel'); ?></button>
-          <a class="btn btn-primary" href="./logout"><?php echo $f3->get('logout'); ?></a>
+          <a class="btn btn-primary" href="./../logout"><?php echo $f3->get('logout'); ?></a>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Bootstrap core JavaScript-->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script type="text/javascript" charset="utf8" src="./js/jquery.dataTables.min.js"></script>
-  <script type="text/javascript" charset="utf8" src="./js/dataTables.bootstrap4.min.js"></script>
-  <script>
-    $(document).ready( function () {
-      if(navigator.language == 'pl-PL' || navigator.userLanguage =='pl-PL')
-      {
-        $('#dataTable').DataTable({
-          "language": {
-            "url": "./js/dataTables.polish.json"
-          }
-        });
-      }
-      else
-      {
-        $('#dataTable').DataTable();
-      }
-    } );
-      function mark_as_read() {
-        var xmlhttp_notifications = new XMLHttpRequest();
-        xmlhttp_notifications.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            $('head').append('<style>'+
-              '.notification {background-color: #f8f6f6;}'+
-              '</style>'
-            );
-            document.getElementById('counter').innerHTML = "0";
-          }
-        };
-        xmlhttp_notifications.open("GET", "./notifications_read", true);
-        xmlhttp_notifications.send();
-      }
-  </script>
 
   <!-- Core plugin JavaScript-->
-  <script src="./js/jquery.easing.min.js"></script>
+  <script src="./../js/jquery.easing.min.js"></script>
 
   <!-- Custom scripts for all pages-->
-  <script src="./js/sb-admin-2.min.js"></script>
-
+  <script src="./../js/sb-admin-2.min.js"></script>
+  <script src="./../js/bootstrap-select.min.js"></script>
+  <script src="./../js/gijgo.min.js"></script>
+  <script>
+    function mark_as_read() {
+      var xmlhttp_notifications = new XMLHttpRequest();
+      xmlhttp_notifications.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          $('head').append('<style>'+
+            '.notification {background-color: #f8f6f6;}'+
+            '</style>'
+          );
+          document.getElementById('counter').innerHTML = "0";
+        }
+      };
+      xmlhttp_notifications.open("GET", "./../notifications_read", true);
+      xmlhttp_notifications.send();
+    }
+  </script>
+  
 </body>
 
 </html>

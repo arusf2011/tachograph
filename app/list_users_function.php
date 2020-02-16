@@ -13,7 +13,7 @@
     $admin_data = $f3->get('admin_data');
 
     $count_drivers = count($drivers);
-    for($i = 0; $i < count($drivers);$i++)
+    for($i = 0; $i < $count_drivers;$i++)
     {
         ?>
             <div class="col-xl-4 col-md-6 mb-4">
@@ -102,10 +102,10 @@
                             ?>
                         </div>
                         <?php if($roles[$admin_data[0]['role_id']-1]['edit_user'] == true) { ?>
-                            <form method="POST" action="./pass_reset_admin/"><input type="hidden" name="email" value="<?= $drivers[$i]['email'] ?>"><button type="submit" class="btn btn-warning lookup_btn" <?php if($_SESSION['nickname'] == $drivers[$i]['nickname']) echo 'disabled' ?> ><i class="fas fa-key"></i></button></form>
-                            <button href="javascript:void(0);" data-href="./delete_user/<?= $drivers[$i]['id'] ?>" class="btn btn-danger lookup_btn" <?php if($_SESSION['nickname'] == $drivers[$i]['nickname']) echo 'disabled' ?> ><i class="fas fa-trash"></i></button>
+                            <form method="POST" action="./pass_reset_admin/"><input type="hidden" name="email" value="<?= $drivers[$i]['email'] ?>"><button type="submit" class="btn btn-warning lookup_btn ml-1" <?php if($_SESSION['nickname'] == $drivers[$i]['nickname']) echo 'disabled' ?> ><i class="fas fa-key"></i></button></form>
+                            <button href="javascript:void(0);" data-href="./delete_user/<?= $drivers[$i]['id'] ?>" class="btn btn-danger lookup_btn ml-1" <?php if($_SESSION['nickname'] == $drivers[$i]['nickname']) echo 'disabled' ?> ><i class="fas fa-trash"></i></button>
                         <?php } ?>
-                        <button href="javascript:void(0);" data-href="./user/<?= $drivers[$i]['id'] ?>" class="btn btn-secondary lookup_btn"><i class="fas fa-info-circle"></i></button>
+                        <button href="javascript:void(0);" data-href="./user/<?= $drivers[$i]['id'] ?>" class="btn btn-secondary lookup_btn ml-1"><i class="fas fa-info-circle"></i></button>
                     </div>
                 </div>
             </div>
@@ -119,7 +119,7 @@
           <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
-          <div class="modal-body-trip modal-body">
+          <div class="modal-body-user modal-body">
           </div>
         </div>
       </div>
