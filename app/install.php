@@ -1374,7 +1374,7 @@
                                     $db_connect .= '$dbname = "'.$db_name.'";\n';
                                     $db_connect .= '$username = "'.$db_nickname.'";\n';
                                     $db_connect .= '$password = "'.$db_pass.'";\n';
-
+                                    $db_connect .= '}';
                                     fwrite($functions,$db_connect);
                                     fclose($functions);
                                     $lock = fopen('./LOCK','w') or die("Couln't create a file!");
