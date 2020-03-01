@@ -1369,11 +1369,11 @@
                                     $db_connect .= '"mysql:host='.$db_host.';post=3306;dbname='.$db_name.'",'."\n";
                                     $db_connect .= '"'.$db_nickname.'",'."\n";
                                     $db_connect .= '"'.$db_pass.'"));'."\n";
-                                    $db_connect .= "}\nelse\n{";
-                                    $db_connect .= '$host = "'.$db_host.'";\n';
-                                    $db_connect .= '$dbname = "'.$db_name.'";\n';
-                                    $db_connect .= '$username = "'.$db_nickname.'";\n';
-                                    $db_connect .= '$password = "'.$db_pass.'";\n';
+                                    $db_connect .= "}\nelse\n{\n";
+                                    $db_connect .= '$host = "'.$db_host.'";'."\n";
+                                    $db_connect .= '$dbname = "'.$db_name.'";'."\n";
+                                    $db_connect .= '$username = "'.$db_nickname.'";'."\n";
+                                    $db_connect .= '$password = "'.$db_pass.'";'."\n";
                                     $db_connect .= '}';
                                     fwrite($functions,$db_connect);
                                     fclose($functions);
