@@ -382,9 +382,7 @@ $lang_arr = array(
 		'vtc_name'=>'VTC Name',
 		'vtc_settings'=>'VTC Settings',
 		'vtc_slogan'=>'Slogan of the VTC',
-		'vtc_slogan'=>'Slogan Wirtualnej Spedycji',
 		'vtc_tmpid'=>'ID of VTC in TruckersMP VTC system',
-		'vtc_tmpid'=>'ID VS w systemie TruckersMP VTC',
 		'welcome_message'=>'Welcome to our company!'.$newline.'
 							We have setup some things for you.'.$newline.'
 							If you need to change settings, click on your nickname and from list pick "Settings".'.$newline."

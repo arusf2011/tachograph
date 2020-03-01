@@ -1364,10 +1364,17 @@
                                 {
                                     $functions = fopen('./app/functions.php', "w") or die("Unable to open file!");
                                     $db_connect = "<?php\n";
+                                    $db_connect .= "if(file_exists('./LOCK'))\n{";
                                     $db_connect .= '$f3->set("db",new DB\SQL('."\n";
                                     $db_connect .= '"mysql:host='.$db_host.';post=3306;dbname='.$db_name.'",'."\n";
                                     $db_connect .= '"'.$db_nickname.'",'."\n";
-                                    $db_connect .= '"'.$db_pass.'"));';
+                                    $db_connect .= '"'.$db_pass.'"));'."\n";
+                                    $db_connect .= "}\nelse\n{";
+                                    $db_connect .= '$host = "'.$db_host.'";\n';
+                                    $db_connect .= '$dbname = "'.$db_name.'";\n';
+                                    $db_connect .= '$username = "'.$db_nickname.'";\n';
+                                    $db_connect .= '$password = "'.$db_pass.'";\n';
+
                                     fwrite($functions,$db_connect);
                                     fclose($functions);
                                     $lock = fopen('./LOCK','w') or die("Couln't create a file!");
