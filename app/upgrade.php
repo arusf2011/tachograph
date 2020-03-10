@@ -38,11 +38,24 @@
             $insert = $f3->get('insert');
             if(!($alter && $insert))
             {
-                $lock = fopen('./LOCK','w') or die("Couln't create a file!");
-                fwrite($lock,'');
-                fclose($lock);
-                header('Location: ./upgrader/success');
-                exit();
+                $f3->set('recrutation_fix',$db->exec('ALTER TABLE `recrutation` CHANGE `dlcs` `dlcs` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;'));
+                $recrutation_fix = $f3->get('recrutation_fix');
+                $f3->set('users_fix',$db->exec('ALTER TABLE `users` CHANGE `dlcs` `dlcs` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;'));
+                $users_fix = $f3->get('users_fix');
+                if(!$recrutation_fix && !$users_fix)
+                {
+                    $lock = fopen('./LOCK','w') or die("Couln't create a file!");
+                    fwrite($lock,'');
+                    fclose($lock);
+                    header('Location: ./upgrader/success');
+                    exit();
+                }
+                else
+                {
+                    $_SESSION['error'] = '2';
+                    header('Location: ./upgrader');
+                    exit();
+                }
             }
             else
             {
@@ -50,6 +63,27 @@
                 header('Location: ./upgrader');
                 exit();
             }
+        }
+        else
+        {
+            $_SESSION['error'] = '2';
+            header('Location: ./upgrader');
+            exit();
+        }
+    }
+    if($_SESSION['version'] == "1_1_1b")
+    {
+        $f3->set('recrutation_fix',$db->exec('ALTER TABLE `recrutation` CHANGE `dlcs` `dlcs` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;'));
+        $recrutation_fix = $f3->get('recrutation_fix');
+        $f3->set('users_fix',$db->exec('ALTER TABLE `users` CHANGE `dlcs` `dlcs` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;'));
+        $users_fix = $f3->get('users_fix');
+        if(!$recrutation_fix && !$users_fix)
+        {
+            $lock = fopen('./LOCK','w') or die("Couln't create a file!");
+            fwrite($lock,'');
+            fclose($lock);
+            header('Location: ./upgrader/success');
+            exit();
         }
         else
         {

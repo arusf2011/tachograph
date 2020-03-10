@@ -31,6 +31,7 @@
                 <select name="version" class="form-control">
                     <option value="">----</option>
                     <option value="1_0">1.0.x</option>
+                    <option value="1_0">1.1.1b</option>
                 </select>
                 <p class="mt-2"><?= $f3->get('alert_users') ?></p>
                 <div class="text-center">

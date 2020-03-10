@@ -23,7 +23,7 @@
         }
     }
     $dlcs = substr($dlcs,3,strlen($dlcs));
-    $f3->set('result',$db->exec('INSERT INTO recrutation VALUES (NULL,?,?,?,?,?,?,?,?,?,?)',
+    $f3->set('result',$db->exec('INSERT INTO recrutation VALUES (NULL,?,?,?,?,?,?,?,?,?,?,0)',
         array($recruit_nickname,
         $recruit_steamid,
         $recruit_steamlink,

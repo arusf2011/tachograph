@@ -1188,7 +1188,7 @@
                             `steam_link` varchar(150) NOT NULL,
                             `on_tmp` tinyint(1) NOT NULL,
                             `ats` tinyint(1) NOT NULL,
-                            `dlcs` varchar(50) NOT NULL,
+                            `dlcs` varchar(500) NOT NULL,
                             `age` int(11) NOT NULL,
                             `email` varchar(50) NOT NULL,
                             `why_u` varchar(150) NOT NULL,
@@ -1296,7 +1296,7 @@
                             `tmpid` int(11) NOT NULL,
                             `truck_ets2` varchar(50) NOT NULL,
                             `truck_ats` varchar(50) NOT NULL,
-                            `dlcs` varchar(200) NOT NULL,
+                            `dlcs` varchar(500) NOT NULL,
                             `role_id` int(11) NOT NULL,
                             PRIMARY KEY(`id`)
                           ) ENGINE=InnoDB DEFAULT CHARSET=utf8'));
