@@ -69,7 +69,7 @@
                                                     <p class="small mb-1"><?php echo $f3->get('to').' - '.$c_end_name[0]['name'].' ('.$comp_end_name[0]['name'].')' ?></p>
                                                     <p class="small mb-1"><?php echo $f3->get('date').' - '.date($global_settings[8]['value'],strtotime($convoys[$i]['date_beg_convoy'])) ?></p>
                                                     <p class="small mb-1"><?php echo $f3->get('time_beg_convoy').' - '.date($global_settings[9]['value'],strtotime($convoys[$i]['time_beg_convoy'])) ?></p>
-                                                    <p class="small mb-1"><?php echo $f3->get('time_groupup').' - '.date($global_settings[9]['value'],strtotime($convoys[$i]['groupup'])) ?></p>
+                                                    <p class="small mb-1"><?php echo $f3->get('time_groupup').' - '.date($global_settings[9]['value'],strtotime($convoys[$i]['time_groupup'])) ?></p>
                                                     
                                                 </div>
                                                 <div class="col-auto">
