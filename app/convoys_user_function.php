@@ -26,7 +26,7 @@
             $comp_end_name = $f3->get('comp_end_name');
             ?>
                 <div class="col-xl-4 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100">
+                    <div class="card border-left-<?= $global_settings[17]['value'] ?> shadow h-100">
                         <div class="card-header">
                             <h2><b><?= $convoys[$i]['name'] ?></b></h2> 
                         </div>

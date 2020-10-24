@@ -54,7 +54,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-<?= $global_settings[17]['value'] ?> sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./dashboard">
@@ -99,7 +99,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item" href="./list_users"><i class="fas fa-list-alt fa-fw"></i> <?php echo $f3->get('list'); ?></a>
             <a class="collapse-item" href="./add_user"><i class="fas fa-user-plus fa-fw"></i> <?php echo $f3->get('add'); ?></a>
-            <a class="collapse-item active" href="./roles"><i class="fas fa-user-shield fa-fw"></i> <?php echo $f3->get('roles'); ?></a>
+            <a class="collapse-item active text-<?= $global_settings[17]['value'] ?>" href="./roles"><i class="fas fa-user-shield fa-fw"></i> <?php echo $f3->get('roles'); ?></a>
           </div>
         </div>
       </li>
@@ -370,7 +370,7 @@
               <?php
             }
           ?>
-          <div class="card shadow border-primary">
+          <div class="card shadow border-<?= $global_settings[17]['value'] ?>">
             <div class="card-header">
               <h1 class="h3 text-gray-800"><?php echo $f3->get('roles'); ?></h1>
             </div>

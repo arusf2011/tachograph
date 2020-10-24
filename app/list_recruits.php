@@ -13,7 +13,7 @@
         {
             ?>
                 <div class="col-xl-4 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100">
+                    <div class="card border-left-<?= $global_settings[17]['value'] ?> shadow h-100">
                         <div class="card-header">
                             <p style="font-size: 1.4rem; margin-bottom: 0;"><b><?= $recruits[$i]['nickname'].' - '.$recruits[$i]['age'].' '.$f3->get('years_old') ?></b></p> 
                         </div>

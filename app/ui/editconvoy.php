@@ -66,7 +66,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-<?= $global_settings[17]['value'] ?> sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./dashboard">
@@ -124,7 +124,7 @@
         </a>
         <div id="convoys" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item active" href="./../list_convoys"><i class="fas fa-list-alt fa-fw"></i> <?php echo $f3->get('list'); ?></a>
+            <a class="collapse-item active text-<?= $global_settings[17]['value'] ?>" href="./../list_convoys"><i class="fas fa-list-alt fa-fw"></i> <?php echo $f3->get('list'); ?></a>
             <a class="collapse-item" href="./../add_convoy"><i class="far fa-plus-square fa-fw"></i> <?php echo $f3->get('add'); ?></a>
           </div>
         </div>

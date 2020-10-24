@@ -42,8 +42,10 @@
   );
   $f3->route('POST /signin',
     function ($f3) {
-      $_SESSION['nickname'] = $f3->get('POST.nickname');
-      $_SESSION['pass'] = $f3->get('POST.pass');
+      $nickname = $f3->get('POST.nickname');
+      $pass = $f3->get('POST.pass');
+      $f3->set('nickname',$nickname);
+      $f3->set('pass',$pass);
       $view = new View;
       echo $view->render('./app/signin.php');
     }

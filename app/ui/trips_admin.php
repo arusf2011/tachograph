@@ -54,7 +54,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-<?= $global_settings[17]['value'] ?> sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./dashboard">
@@ -371,7 +371,7 @@
               unset($_SESSION['error']);
             }
           ?>
-          <div class="card shadow border-primary">
+          <div class="card shadow border-<?= $global_settings[17]['value'] ?>">
             <div class="card-header">
               <h1 class="h3 text-gray-800"><?php echo $f3->get('trips'); ?></h1>
             </div>

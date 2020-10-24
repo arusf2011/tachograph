@@ -54,7 +54,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-<?= $global_settings[17]['value'] ?> sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./dashboard">
@@ -128,7 +128,7 @@
             <a class="collapse-item" href="./cities"><i class="fas fa-city fa-fw"></i> <?php echo $f3->get('cities'); ?></a>
             <a class="collapse-item" href="./companies"><i class="fas fa-building fa-fw"></i> <?php echo $f3->get('companies'); ?></a>
             <a class="collapse-item" href="./dlcs"><i class="fas fa-file-download fa-fw"></i> <?php echo $f3->get('dlcs'); ?></a>
-            <a class="collapse-item active" href="./trucks"><i class="fas fa-truck fa-fw"></i> <?php echo $f3->get('trucks'); ?></a>
+            <a class="collapse-item active text-<?= $global_settings[17]['value'] ?>" href="./trucks"><i class="fas fa-truck fa-fw"></i> <?php echo $f3->get('trucks'); ?></a>
             <a class="collapse-item" href="./loads"><i class="fas fa-truck-loading fa-fw"></i> <?php echo $f3->get('loads'); ?></a>
             <a class="collapse-item" href="./global_settings"><i class="fas fa-edit fa-fw"></i> <?php echo $f3->get('global_settings'); ?></a>
           </div>
@@ -370,7 +370,7 @@
               <?php
             }
           ?>
-          <div class="card shadow border-primary">
+          <div class="card shadow border-<?= $global_settings[17]['value'] ?>">
             <div class="card-header">
               <h1 class="h3 text-gray-800"><?php echo $f3->get('trucks'); ?></h1>
             </div>

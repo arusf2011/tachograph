@@ -52,7 +52,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-<?= $global_settings[17]['value'] ?> sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./dashboard">
@@ -128,7 +128,7 @@
             <a class="collapse-item" href="./dlcs"><i class="fas fa-file-download fa-fw"></i> <?php echo $f3->get('dlcs'); ?></a>
             <a class="collapse-item" href="./trucks"><i class="fas fa-truck fa-fw"></i> <?php echo $f3->get('trucks'); ?></a>
             <a class="collapse-item" href="./loads"><i class="fas fa-truck-loading fa-fw"></i> <?php echo $f3->get('loads'); ?></a>
-            <a class="collapse-item active" href="./global_settings"><i class="fas fa-edit fa-fw"></i> <?php echo $f3->get('global_settings'); ?></a>
+            <a class="collapse-item active text-<?= $global_settings[17]['value'] ?>" href="./global_settings"><i class="fas fa-edit fa-fw"></i> <?php echo $f3->get('global_settings'); ?></a>
           </div>
         </div>
       </li>
@@ -359,7 +359,7 @@
               <?php
             }
           ?>
-          <div class="card shadow border-primary">
+          <div class="card shadow border-<?= $global_settings[17]['value'] ?>">
             <div class="card-header">
               <h1 class="h3 text-gray-800"><?php echo $f3->get('global_settings'); ?></h1>
             </div>
@@ -403,6 +403,30 @@
                       </div>
                     </form>
                   <?php
+                  }
+                  else if($setting['id'] == 18)
+                  {
+                    ?>
+                      <form method="post" class="" action="./change_setting/<?= $setting['id'] ?>">
+                        <div class="row mt-3">
+                          <div class="col-md-3 text-right">
+                            <label style="margin:0; vertical-align: sub" for="setting<?= $setting['id'] ?>"><?= $f3->get($setting['name']) ?></label>
+                          </div>
+                          <div class="col-md-9 justify-content-start form-row">
+                            <select id="setting<?= $setting['id'] ?>" name="value" class="form-control col-md-8">
+                              <option value="primary" class="text-primary" <?php if($setting['value'] == 'primary') echo 'selected' ?> ><?= $f3->get('blue') ?></option>
+                              <option value="secondary" class="text-secondary" <?php if($setting['value'] == 'secondary') echo 'selected' ?> ><?= $f3->get('grey') ?></option>
+                              <option value="danger" class="text-danger" <?php if($setting['value'] == 'danger') echo 'selected' ?> ><?= $f3->get('red') ?></option>
+                              <option value="success" class="text-success" <?php if($setting['value'] == 'success') echo 'selected' ?> ><?= $f3->get('green') ?></option>
+                              <option value="info" class="text-info" <?php if($setting['value'] == 'info') echo 'selected' ?> ><?= $f3->get('turquoise') ?></option>
+                              <option value="warning" class="text-warning" <?php if($setting['value'] == 'warning') echo 'selected' ?> ><?= $f3->get('yellow') ?></option>
+                            </select>
+                            <div class="col-md-1"></div>
+                            <button type="submit" class="btn btn-success col-md-3"><i class="fas fa-edit"></i> <?= $f3->get('change_setting') ?></button>
+                          </div>
+                        </div>
+                      </form>
+                    <?php
                   }
                   else
                   {

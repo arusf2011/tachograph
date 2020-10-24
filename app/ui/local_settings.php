@@ -53,7 +53,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-<?= $global_settings[17]['value'] ?> sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./dashboard">
@@ -393,7 +393,7 @@
               <?php
             }
           ?>
-          <div class="card shadow border-primary">
+          <div class="card shadow border-<?= $global_settings[17]['value'] ?>">
             <div class="card-header">
               <h1 class="h3 text-gray-800"><?php echo $f3->get('settings'); ?></h1>
             </div>
@@ -468,6 +468,21 @@
                       <div class="col-md-1"></div>
                       <button type="submit" class="btn btn-success col-md-3"><i class="fas fa-edit"></i> <?= $f3->get('change_setting') ?></button>
                     </div>
+                </div>
+              </form>
+              <form method="post" action="./dark_mode">
+                <div class="row mt-3">
+                  <div class="col-md-4 text-right">
+                    <label style="margin:0; vertical-align: sub" ><?= $f3->get('dark_mode') ?></label>
+                  </div>
+                  <div class="col-md-8 form-row">
+                    <select name="dark_mode" class="form-control col-md-8">
+                      <option value="0" <?php if($user_data[0]['dark_mode'] == 0) echo 'selected' ?> ><?= $f3->get('turned_off') ?></option>
+                      <option value="1" <?php if($user_data[0]['dark_mode'] == 1) echo 'selected' ?> ><?= $f3->get('turned_on') ?></option>
+                    </select>
+                    <div class="col-md-1"></div>
+                    <button type="submit" class="btn btn-success col-md-3"><i class="fas fa-edit"></i> <?= $f3->get('change_setting') ?></button>
+                  </div>
                 </div>
               </form>
               <hr>

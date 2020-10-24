@@ -51,7 +51,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-<?= $global_settings[17]['value'] ?> sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./dashboard">
@@ -162,7 +162,7 @@
         </a>
         <div id="trips" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item active" href="./add_trip"><i class="fas fa-plus-square fa-fw"></i> <?= $f3->get('add_trip') ?></a>
+            <a class="collapse-item active text-<?= $global_settings[17]['value'] ?>" href="./add_trip"><i class="fas fa-plus-square fa-fw"></i> <?= $f3->get('add_trip') ?></a>
             <a class="collapse-item" href="./trips_user"><i class="fas fa-clipboard-list fa-fw"></i> <?= $f3->get('list') ?></a>
           </div>
         </div>

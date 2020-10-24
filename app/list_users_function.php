@@ -17,7 +17,7 @@
     {
         ?>
             <div class="col-xl-4 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100">
+                <div class="card border-left-<?= $global_settings[17]['value'] ?> shadow h-100">
                     <div class="card-header">
                         <h2 class="<?= $roles[$drivers[$i]['role_id']-1]['color'] ?>"><b><?= $drivers[$i]['nickname'] ?></b></h2> 
                     </div>

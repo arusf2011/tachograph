@@ -73,7 +73,7 @@
             $smtp->set('Errors-to', '<'.$global_settings[11]['value'].'>');
             $smtp->set('Content-Type', 'text/html; charset=UTF-8; boundary="'.$hash.'"');
     
-            $html = $f3->get('accept_recruit_firstpart').$message_mail.'<br><a href="'.$_SERVER['SERVER_NAME'].'">'.$_SERVER['SERVER_NAME'].'</a><br>'.$f3->get('nickname').' - '.$user_data[0]['nickname'].'<br>'.$f3->get('password').' - <a href="'.$_SERVER['SERVER_NAME'].'/set_password/'.$hash_pass.'">'.$f3->get('click_resetpass').'</a><br>'.$f3->get('accept_recruit_secondpart');
+            $html = $f3->get('accept_recruit_firstpart').$message_mail.'<br><a href="'.$_SERVER['SERVER_NAME'].'">'.$_SERVER['SERVER_NAME'].'</a><br>'.$f3->get('nickname').' - '.$nick_new.'<br>'.$f3->get('password').' - <a href="'.$_SERVER['SERVER_NAME'].'/set_password/'.$hash_pass.'">'.$f3->get('click_resetpass').'</a><br>'.$f3->get('accept_recruit_secondpart');
             
             $eol="\r\n";
             $body .= $html.$eol.$eol;
