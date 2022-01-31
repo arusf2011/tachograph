@@ -1,3 +1,5 @@
+# DEPRECATED
+**Please be aware that this script is no longer maintaned.**
 # Tachograph v2 for ETS2 & ATS
 Version `1.1`
 
